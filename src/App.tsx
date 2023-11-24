@@ -2,6 +2,7 @@ import React from 'react'
 import './App.css'
 import { listsAPI } from './logic/api'
 import { itemType } from './vite-env'
+import ItemList from './components/ItemList'
 
 type Props = {
   request: string
@@ -51,7 +52,7 @@ export default function ListComponent({ request }: Props) {
   return <section className="screen">
     <div>
       <div className="app-cont">
-        {ArrayList !== undefined ? <ul>Here is the list</ul>
+        {ArrayList !== undefined ? <ItemList array={ArrayList} changeArray={changeArray} editable/>
           : <div className='loading-icon margin-0-auto'></div>}
       </div>
     </div>
