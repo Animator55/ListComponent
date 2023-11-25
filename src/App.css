@@ -1,0 +1,105 @@
+body { 
+    margin: 0;
+    --cmain: #353535;
+    --cscnd: #e7fbf6;
+    --cgray: #686868;
+    --clightgray: #b8b8b8;
+}
+
+.d-flex-col {
+    display: flex;
+    flex-direction: column;
+}
+.align-c {
+    align-items: center;
+}
+
+button {
+    border: none;
+    background-color: transparent;
+}
+
+button * {
+    pointer-events: none;
+}
+
+.list-tool-bar {
+    padding: 0.5rem;
+    background: var(--cmain);
+    color:var(--cscnd);
+    justify-content: end;
+    display: flex;
+    position: relative;
+}
+.list-tool-bar > button {
+    color:var(--cscnd);
+}
+
+.list-config-span {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    scale:0;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    transition: scale 300ms;
+    transform-origin: 80% 0%;
+    background: var(--cmain);
+}
+.list-config-span.expanded {
+    scale: 1;
+    transform-origin: 80% 0%;
+    transition: scale 300ms;
+}
+
+.list-config-span > button {
+    margin: 0.6rem 0.4rem;
+    color: var(--cscnd);
+    display: flex;
+    gap: 0.5rem
+}
+
+.list-head {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--cgray);
+}
+.list-head > section {
+    display: grid;
+    background-color: transparent;
+    gap: 0.2%;
+    padding: 0.1%;
+    width: 100%;
+}
+.list-head > section > button {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: var(--clightgray);
+}
+.list-head > section > button:hover {
+    background-color: var(--cscnd);
+}
+.list-head > section > button > svg {
+    margin-right: auto;
+}
+
+.list {
+
+}
+
+.item {
+
+}
+
+.item.selected {
+
+}
+
+.item-content {
+
+}

@@ -49,12 +49,6 @@ export default function ListComponent({ request }: Props) {
     getList()
   }, [])
 
-  return <section className="screen">
-    <div>
-      <div className="app-cont">
-        {ArrayList !== undefined ? <ItemList array={ArrayList} changeArray={changeArray} editable/>
-          : <div className='loading-icon margin-0-auto'></div>}
-      </div>
-    </div>
-  </section>
+  return ArrayList !== undefined ? <ItemList array={ArrayList} changeArray={changeArray} editable/>
+    : <div className='loading-icon margin-0-auto'></div>
 }
