@@ -1,9 +1,10 @@
 body { 
     margin: 0;
     --cmain: #353535;
-    --cscnd: #e7fbf6;
-    --cgray: #686868;
-    --clightgray: #b8b8b8;
+    --cscnd: #ffffff;
+    --cgray: #919191;
+    --cgray2: #c9c9c9;
+    --clightgray: #d8d8d8;
 }
 
 .d-flex-col {
@@ -70,7 +71,7 @@ button * {
     display: grid;
     background-color: transparent;
     gap: 0.2%;
-    padding: 0.1%;
+    border: 1px solid var(--cgray);
     width: 100%;
 }
 .list-head > section > button {
@@ -89,17 +90,40 @@ button * {
 }
 
 .list {
-
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 0.5rem;
 }
 
 .item {
-
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
 }
 
-.item.selected {
-
+.item.selected > .item-content > div {
+    background-color: var(--cgray2);
 }
 
 .item-content {
+    background-color: var(--cgray);
+    border-radius: 3px;
+    display: grid;
+    border: 1px solid var(--cgray);
+    gap: 0.2%;
+    width: 100%;
+}
 
+.item-content > div {
+    text-align: end;
+    padding: 0.5rem 0.2rem;
+    background-color: var(--clightgray);
+}
+.item-content > div:first-child {
+    border-radius: 3px 0 0 3px;
+}
+
+.item-content > div:last-child {
+    border-radius: 0 3px 3px 0;
 }

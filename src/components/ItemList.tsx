@@ -55,7 +55,7 @@ const checkChips = (val: string[] | string, canDelete: boolean, deleteFunction?:
 }
 
 const generateColumns = (columns:number):string=>{
-    let columnWidth = (99.8-(columns-1)*0.2)/columns
+    let columnWidth = (100-(columns-1)*0.2)/columns
     let result = "repeat("+columns+", "+columnWidth+"%)"
     
     console.log(result)
@@ -177,6 +177,7 @@ export default function ItemList ({array, changeArray, editable}:Props){
                         <div 
                             className="item-content"
                             onClick={()=>{if(editable) setEditItem([item, i])}} 
+                            style={{gridTemplateColumns: generateColumns(Object.keys(array[0]).length+1)}}
                         >
                             {!hiddenColumns.includes("#") && <div>{"#"+i}</div>}
                             {Object.keys(item).map(key=>{
