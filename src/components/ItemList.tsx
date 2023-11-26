@@ -9,6 +9,7 @@ import { itemType } from "../vite-env"
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons/faCaretDown"
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark"
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons/faEllipsis"
+import Form from "./Form"
 
 type Props = {
     array: itemType[],
@@ -58,7 +59,6 @@ const generateColumns = (columns:number):string=>{
     let columnWidth = (100-(columns-1)*0.2)/columns
     let result = "repeat("+columns+", "+columnWidth+"%)"
     
-    console.log(result)
     return result
 }
 
@@ -96,14 +96,22 @@ export default function ItemList ({array, changeArray, editable}:Props){
     //     setSelectedItems([])
     // }
 
+    
+    const formConfirm = (item: itemType, create:boolean, index: number)=>{
+        setEditItem(undefined)
+        if(item === undefined) return 
+        if(create) changeArray.create(item)
+        else changeArray.edit(index, item)
+    }
+
     console.log(EditItem)
     
     function TopBar () {
         return (<>
             {/* {close ? <PopUp visibility={close} setPopUp={setPopUp} confirm={()=>{handlerEditItems("delete")}}/> : null} */}
             <nav className="list-tool-bar">
-                {/* <ProductForm initialData={EditItem} confirm={formConfirm}/>
-                {selectedItems.length > 0 ? 
+                <Form entries={} initialData={EditItem} confirm={formConfirm}/>
+                {/* {selectedItems.length > 0 ? 
                     <FontAwesomeIcon icon={faTrash} onClick={()=>{setPopUp(true)}} size="xl"/>
                 : null} */}
                 <button  
