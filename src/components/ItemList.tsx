@@ -20,6 +20,7 @@ type Props = {
         edit: Function
     }
     editable: boolean
+    structure: itemType
 }
 
 const sortArray = (sort, array) => {
@@ -65,7 +66,7 @@ const generateColumns = (columns:number):string=>{
 let blockedColumns: string[] = ["Nombre", "Estado"]
 let notEditableColumns: string[] = ["_id", "Componentes", "Tags", "Image"]
 
-export default function ItemList ({array, changeArray, editable}:Props){
+export default function ItemList ({array, changeArray, editable, structure}:Props){
     const [hiddenColumns, setHiddenColumns] = React.useState<string[]>([])
     const [selectedItems, setSelectedItems] = React.useState<string[]>([])
     const [EditItem, setEditItem] = React.useState<(number | itemType)[] | undefined>(undefined)
@@ -110,7 +111,7 @@ export default function ItemList ({array, changeArray, editable}:Props){
         return (<>
             {/* {close ? <PopUp visibility={close} setPopUp={setPopUp} confirm={()=>{handlerEditItems("delete")}}/> : null} */}
             <nav className="list-tool-bar">
-                <Form entries={} initialData={EditItem} confirm={formConfirm}/>
+                <Form structure={structure} initialData={EditItem} confirm={formConfirm}/>
                 {/* {selectedItems.length > 0 ? 
                     <FontAwesomeIcon icon={faTrash} onClick={()=>{setPopUp(true)}} size="xl"/>
                 : null} */}

@@ -21,6 +21,10 @@ button {
     cursor: pointer;
 }
 
+input {
+    outline: none;
+}
+
 button * {
     pointer-events: none;
 }
@@ -137,15 +141,20 @@ button * {
 }
 
 .blur-background > section {
-    background-color: var(--cscnd);
+    background-color: var(--clightgray);
     min-width: 60%;
     min-height: 70%;
     border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 30px #000000ba;
+    border: 5px solid var(--cmain);
+    border-top: 0px;
 }
 
 .blur-background > section > nav {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 0.5rem 1rem;
     background-color: var(--cmain);
 }
@@ -170,8 +179,11 @@ button * {
     gap: 0.1rem;
 }
 
+.custom-input > label {
+    color: var(--cmain);
+}
 .custom-input > input {
-    background-color: var(--cgray);
+    background-color: var(--cscnd);
     padding: 0.5rem;
     border-radius: 3px;
 }

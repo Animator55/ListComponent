@@ -11,6 +11,15 @@ type Props = {
 
 // let requestCounter = 0
 
+let structure = {
+  "_id": "", 
+  "Nombre": "", 
+  "Tipo": "", 
+  "Descripción": "", 
+  "Tags": [], 
+  "Estado": ""
+}
+
 export default function ListComponent({ request }: Props) {
   const [ArrayList, setList] = React.useState<itemType[] | undefined>()
 
@@ -49,6 +58,6 @@ export default function ListComponent({ request }: Props) {
     getList()
   }, [])
 
-  return ArrayList !== undefined ? <ItemList array={ArrayList} changeArray={changeArray} editable/>
+  return ArrayList !== undefined ? <ItemList array={ArrayList} changeArray={changeArray} editable structure={structure}/>
     : <div className='loading-icon margin-0-auto'></div>
 }

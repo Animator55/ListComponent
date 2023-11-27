@@ -4,15 +4,15 @@ import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 type Props = {
-    entries: string[]
+    structure: itemType
     initialData: Array<itemType | number> | undefined
     confirm: Function
 }
 
-export default function Form({entries, initialData, confirm}: Props) {
-    let data = initialData !== undefined ? initialData[0] as itemType : undefined
+export default function Form({structure, initialData, confirm}: Props) {
+    let data = initialData !== undefined ? initialData[0] as itemType : {...structure}
 
-    const [LocalData, setLocalData] = React.useState<itemType | undefined>(data)
+    const [LocalData, setLocalData] = React.useState<itemType>(data)
     const [displayed, setDisplayed] = React.useState(initialData !== undefined)
     
     const submit = ()=>{
@@ -30,7 +30,7 @@ export default function Form({entries, initialData, confirm}: Props) {
                 </button>
             </nav>
             <form onSubmit={submit}>
-                {entries.map((key:string)=>{
+                {structure && Object.keys(structure).map((key:string)=>{
                     return <div className='custom-input' key={Math.random()}>
                         <label>{key}</label>
                         <input
