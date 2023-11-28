@@ -7,6 +7,10 @@ body {
     --clightgray: #d8d8d8;
 }
 
+.d-flex {
+    display: flex;
+}
+
 .d-flex-col {
     display: flex;
     flex-direction: column;
@@ -151,18 +155,25 @@ button * {
     border-top: 0px;
 }
 
+.blur-background > .pop-up {
+    min-width: 20%;
+    min-height: 10%;
+}
+
 .blur-background > section > nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 0.5rem 1rem;
     background-color: var(--cmain);
 }
 .blur-background > section > nav > * {
     margin: 0;
+    color: var(--cscnd);
 }
 
 .close {
+    margin-left: auto!important;
     color: var(--cscnd);
 }
 
@@ -194,4 +205,28 @@ button * {
     border-radius: 2px;
     margin-left: auto;
     padding: 0.7rem 1rem;
+}
+
+.pop-button {
+    font-size: 1.3rem;
+    padding: 0.4rem 1rem;
+    margin: 0.5rem auto;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.pop-button > p {
+    margin: 0;
+    font-size: 0.7rem;
+}
+
+.pop-button:first-child {
+    background-color: var(--cmain);
+    color: var(--cscnd);
+    border-radius: 3px;
+}
+
+.pop-button:last-child {
+    color: var(--cmain);
 }

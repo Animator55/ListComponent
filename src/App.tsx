@@ -11,17 +11,16 @@ type Props = {
 
 // let requestCounter = 0
 
-let structure = {
-  "_id": "", 
-  "Nombre": "", 
-  "Tipo": "", 
-  "Descripción": "", 
-  "Tags": [], 
-  "Estado": ""
-}
-
 export default function ListComponent({ request }: Props) {
   const [ArrayList, setList] = React.useState<itemType[] | undefined>()
+  const [structure, setStructure] = React.useState({
+    "_id": "", 
+    "Nombre": "", 
+    "Tipo": "", 
+    "Descripción": "", 
+    "Tags": [], 
+    "Estado": ""
+  })
 
   const getList = async () => {
     let list = await listsAPI.getLists(request)

@@ -1,4 +1,4 @@
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons"
+import { faCircleExclamation, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { faCheckSquare } from "@fortawesome/free-solid-svg-icons/faCheckSquare"
 import { faGear } from "@fortawesome/free-solid-svg-icons/faGear"
 import { faLock } from "@fortawesome/free-solid-svg-icons/faLock"
@@ -10,6 +10,7 @@ import { faCaretDown } from "@fortawesome/free-solid-svg-icons/faCaretDown"
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark"
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons/faEllipsis"
 import Form from "./Form"
+import PopUp from "./PopUp"
 
 type Props = {
     array: itemType[],
@@ -71,7 +72,7 @@ export default function ItemList ({array, changeArray, editable, structure}:Prop
     const [selectedItems, setSelectedItems] = React.useState<string[]>([])
     const [EditItem, setEditItem] = React.useState<(number | itemType)[] | undefined>(undefined)
     const [sortValue, setSortValue] = React.useState<string|undefined>(undefined)
-    // const [close, setPopUp] = React.useState(false)
+    const [close, setPopUp] = React.useState(false)
 
     let sortValSplited = sortValue !== undefined ? sortValue[0] === "-" ? sortValue.split(":")[1] : sortValue : undefined
     let direction = sortValue !== undefined ? sortValue[0] === "-" ? 0 : 1 : undefined 
@@ -92,10 +93,10 @@ export default function ItemList ({array, changeArray, editable, structure}:Prop
         }
     }
 
-    // const handlerEditItems = (action: string, index: number, value: itemType) =>{
-    //     changeArray[action](selectedItems, index, value)
-    //     setSelectedItems([])
-    // }
+    const handlerEditItems = (action: string, index?: number, value?: itemType) =>{
+        changeArray[action](selectedItems, index, value)
+        setSelectedItems([])
+    }
 
     
     const formConfirm = (item: itemType, create:boolean, index: number)=>{
@@ -109,12 +110,14 @@ export default function ItemList ({array, changeArray, editable, structure}:Prop
     
     function TopBar () {
         return (<>
-            {/* {close ? <PopUp visibility={close} setPopUp={setPopUp} confirm={()=>{handlerEditItems("delete")}}/> : null} */}
+            {close ? <PopUp visibility={close} setPopUp={setPopUp} confirm={()=>{handlerEditItems("delete")}}/> : null}
             <nav className="list-tool-bar">
                 <Form structure={structure} initialData={EditItem} confirm={formConfirm}/>
-                {/* {selectedItems.length > 0 ? 
-                    <FontAwesomeIcon icon={faTrash} onClick={()=>{setPopUp(true)}} size="xl"/>
-                : null} */}
+                {selectedItems.length > 0 ? 
+                    <button onClick={()=>{setPopUp(true)}}>
+                        <FontAwesomeIcon icon={faTrash} size="xl"/>
+                    </button>
+                : null}
                 <button  
                     onClick={(e: React.MouseEvent)=>{
                         let span = e.currentTarget.nextSibling as HTMLDivElement
