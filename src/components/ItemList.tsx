@@ -11,6 +11,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark"
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons/faEllipsis"
 import Form from "./Form"
 import PopUp from "./PopUp"
+import StructureForm from "./StructureForm"
 
 type Props = {
     array: itemType[],
@@ -21,10 +22,11 @@ type Props = {
         edit: Function
     }
     editable: boolean
-    structure: itemType
+    structure: string[]
+    setStructure: Function
 }
 
-const sortArray = (sort, array) => {
+const sortArray = (sort:string, array: itemType[]) => {
     if(sort === undefined) return
     let sortVal = sort.split(":")
     let sortValIndex = sortVal[0] === "-" ? 1 : 0
@@ -67,19 +69,20 @@ const generateColumns = (columns:number):string=>{
 let blockedColumns: string[] = ["Nombre", "Estado"]
 let notEditableColumns: string[] = ["_id", "Componentes", "Tags", "Image"]
 
-export default function ItemList ({array, changeArray, editable, structure}:Props){
-    const [hiddenColumns, setHiddenColumns] = React.useState<string[]>([])
+export default function ItemList ({array, changeArray, editable, structure, setStructure}:Props){
+    const [hiddenColumns, setHiddenColumns] = React.useState<string[]>(["_id"])
     const [selectedItems, setSelectedItems] = React.useState<string[]>([])
     const [EditItem, setEditItem] = React.useState<(number | itemType)[] | undefined>(undefined)
     const [sortValue, setSortValue] = React.useState<string|undefined>(undefined)
     const [close, setPopUp] = React.useState(false)
+    const [structurePop, setStructurePop] = React.useState(false)
 
     let sortValSplited = sortValue !== undefined ? sortValue[0] === "-" ? sortValue.split(":")[1] : sortValue : undefined
     let direction = sortValue !== undefined ? sortValue[0] === "-" ? 0 : 1 : undefined 
 
     const handlerHiddenCol = (key: string) => {
         if(blockedColumns.includes(key)) return
-        if(hiddenColumns.includes(key)) setHiddenColumns([...hiddenColumns, key])
+        if(!hiddenColumns.includes(key)) setHiddenColumns([...hiddenColumns, key])
         else setHiddenColumns([...hiddenColumns.filter((el)=>{return el !== key})])
     }
 
@@ -98,7 +101,6 @@ export default function ItemList ({array, changeArray, editable, structure}:Prop
         setSelectedItems([])
     }
 
-    
     const formConfirm = (item: itemType, create:boolean, index: number)=>{
         setEditItem(undefined)
         if(item === undefined) return 
@@ -106,13 +108,18 @@ export default function ItemList ({array, changeArray, editable, structure}:Prop
         else changeArray.edit(index, item)
     }
 
-    console.log(EditItem)
+    const structureConfirm = (arr:string[])=>{
+        setStructurePop(false)
+        if(arr === undefined) return
+        setStructure(arr)
+    }
     
     function TopBar () {
         return (<>
-            {close ? <PopUp visibility={close} setPopUp={setPopUp} confirm={()=>{handlerEditItems("delete")}}/> : null}
+            {close && <PopUp visibility={close} setPopUp={setPopUp} confirm={()=>{handlerEditItems("delete")}}/>}
             <nav className="list-tool-bar">
                 <Form structure={structure} initialData={EditItem} confirm={formConfirm}/>
+                {structurePop && <StructureForm structure={structure} confirm={structureConfirm}/>}
                 {selectedItems.length > 0 ? 
                     <button onClick={()=>{setPopUp(true)}}>
                         <FontAwesomeIcon icon={faTrash} size="xl"/>
@@ -125,8 +132,10 @@ export default function ItemList ({array, changeArray, editable, structure}:Prop
                     }}>
                     <FontAwesomeIcon icon={faGear} size="xl"/>
                 </button>
-                <div className="list-config-span">
-                    <button onClick={()=>{handlerHiddenCol("#")}}><FontAwesomeIcon icon={!hiddenColumns.includes("#") ? faCheckSquare : faSquare} className="margin-right-5px"/>Index</button>
+                <div className="col-visible-span">
+                    <button onClick={()=>{setStructurePop(true)}}><FontAwesomeIcon icon={faGear}/>Configurate Columns</button>
+                    <hr/>
+                    <button onClick={()=>{handlerHiddenCol("#")}}><FontAwesomeIcon icon={!hiddenColumns.includes("#") ? faCheckSquare : faSquare}/>Index</button>
                     {array.length !== 0 && Object.keys(array[0]).map(key=>{
                         return <button 
                             key={Math.random()} 
@@ -146,7 +155,7 @@ export default function ItemList ({array, changeArray, editable, structure}:Prop
                 icon={selectedItems.length === array.length ? faCheckSquare : faSquare} 
                 size="xl"
             />
-            <section style={{gridTemplateColumns: generateColumns(Object.keys(array[0]).length+1)}}>
+            <section style={{gridTemplateColumns: generateColumns((Object.keys(array[0]).length+1) - hiddenColumns.length)}}>
                 {!hiddenColumns.includes("#") && <button className={sortValSplited === "#" ? "btn-active" : ""} onClick={()=>{setSortValue(undefined)}}>{"#"}</button>}
                 {Object.keys(array[0]).map(key=>{
                     if(!hiddenColumns.includes(key)){
@@ -189,7 +198,7 @@ export default function ItemList ({array, changeArray, editable, structure}:Prop
                         <div 
                             className="item-content"
                             onClick={()=>{if(editable) setEditItem([item, i])}} 
-                            style={{gridTemplateColumns: generateColumns(Object.keys(array[0]).length+1)}}
+                            style={{gridTemplateColumns: generateColumns((Object.keys(array[0]).length+1) - hiddenColumns.length)}}
                         >
                             {!hiddenColumns.includes("#") && <div>{"#"+i}</div>}
                             {Object.keys(item).map(key=>{

@@ -8,19 +8,26 @@ type Props = {
   request: string
 }
 
-
+// {
+//   "_id": "", 
+//   "Nombre": "", 
+//   "Tipo": "", 
+//   "Descripción": "", 
+//   "Tags": [], 
+//   "Estado": ""
+// }
 // let requestCounter = 0
 
 export default function ListComponent({ request }: Props) {
   const [ArrayList, setList] = React.useState<itemType[] | undefined>()
-  const [structure, setStructure] = React.useState({
-    "_id": "", 
-    "Nombre": "", 
-    "Tipo": "", 
-    "Descripción": "", 
-    "Tags": [], 
-    "Estado": ""
-  })
+  const [structure, setStructure] = React.useState([
+    "_id", 
+    "Nombre", 
+    "Tipo", 
+    "Descripción", 
+    "Tags", 
+    "Estado"
+  ])
 
   const getList = async () => {
     let list = await listsAPI.getLists(request)
@@ -57,6 +64,6 @@ export default function ListComponent({ request }: Props) {
     getList()
   }, [])
 
-  return ArrayList !== undefined ? <ItemList array={ArrayList} changeArray={changeArray} editable structure={structure}/>
+  return ArrayList !== undefined ? <ItemList array={ArrayList} changeArray={changeArray} editable structure={structure} setStructure={setStructure}/>
     : <div className='loading-icon margin-0-auto'></div>
 }

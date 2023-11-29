@@ -4,25 +4,26 @@ import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 type Props = {
-    structure: itemType
+    structure: string[]
     initialData: Array<itemType | number> | undefined
     confirm: Function
 }
 
 export default function Form({structure, initialData, confirm}: Props) {
-    let data = initialData !== undefined ? initialData[0] as itemType : {...structure}
+    let data = initialData !== undefined ? initialData[0] as itemType : structure.reduce((obj, key) => ({ ...obj, [key]: "" }), {}) as itemType
 
     const [LocalData, setLocalData] = React.useState<itemType>(data)
     const [displayed, setDisplayed] = React.useState(initialData !== undefined)
     
-    const submit = ()=>{
+    const submit = (e: React.FormEvent<HTMLFormElement>)=>{
+        e.preventDefault()
         let create = initialData === undefined
         let index = initialData === undefined ? 0 : initialData[1]
         confirm(LocalData, create, index)
     }
 
     return displayed ? <section className='blur-background'>
-        <section onSubmit={submit}>
+        <section>
             <nav>
                 <h4>{LocalData?._id}</h4>
                 <button className="close" type='button' onClick={()=>{setDisplayed(false); setLocalData(data); confirm()}}>
@@ -30,7 +31,7 @@ export default function Form({structure, initialData, confirm}: Props) {
                 </button>
             </nav>
             <form onSubmit={submit}>
-                {structure && Object.keys(structure).map((key:string)=>{
+                {structure && structure.map((key:string)=>{
                     return <div className='custom-input' key={Math.random()}>
                         <label>{key}</label>
                         <input

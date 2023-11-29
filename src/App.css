@@ -45,29 +45,36 @@ button * {
     color:var(--cscnd);
 }
 
-.list-config-span {
+.col-visible-span {
     position: absolute;
     right: 0;
     top: 100%;
-    scale:0;
+    scale: 0;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     align-items: start;
     transition: scale 300ms;
     transform-origin: 80% 0%;
     background: var(--cmain);
 }
-.list-config-span.expanded {
+.col-visible-span.expanded {
     scale: 1;
     transform-origin: 80% 0%;
     transition: scale 300ms;
 }
 
-.list-config-span > button {
+.col-visible-span > button {
     margin: 0.6rem 0.4rem;
     color: var(--cscnd);
     display: flex;
-    gap: 0.5rem
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.col-visible-span > hr {    
+    width: 89%;
+    margin: 0 auto;
 }
 
 .list-head {
