@@ -145,6 +145,7 @@ button * {
     inset: 0;
     backdrop-filter: blur(1px);
     display: flex;
+    z-index: 1;
 }
 
 .blur-background > * {

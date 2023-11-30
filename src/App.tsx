@@ -1,33 +1,25 @@
 import React from 'react'
 import './App.css'
 import { listsAPI } from './logic/api'
-import { itemType } from './vite-env'
+import { itemType, structureType } from './vite-env'
 import ItemList from './components/ItemList'
 
 type Props = {
   request: string
 }
 
-// {
-//   "_id": "", 
-//   "Nombre": "", 
-//   "Tipo": "", 
-//   "Descripción": "", 
-//   "Tags": [], 
-//   "Estado": ""
-// }
 // let requestCounter = 0
 
 export default function ListComponent({ request }: Props) {
   const [ArrayList, setList] = React.useState<itemType[] | undefined>()
-  const [structure, setStructure] = React.useState([
-    "_id", 
-    "Nombre", 
-    "Tipo", 
-    "Descripción", 
-    "Tags", 
-    "Estado"
-  ])
+  const [structure, setStructure] = React.useState<structureType>({
+    "_id": {_id: "_id", name: "_id", size: "", blocked: false}, 
+    "1001": {_id: "1001", name:"Nombre", size: "", blocked: false}, 
+    "1002": {_id: "1002", name:"Tipo", size: "", blocked: false}, 
+    "1003": {_id: "1003", name:"Descripción", size: "", blocked: false}, 
+    "1004": {_id: "1004", name:"Tags", size: "", blocked: false}, 
+    "1005": {_id: "1005", name:"Estado", size: "", blocked: false}
+  })
 
   const getList = async () => {
     let list = await listsAPI.getLists(request)
@@ -35,7 +27,6 @@ export default function ListComponent({ request }: Props) {
 
     setList(list)
   }
-
 
   const changeArray = {
     "create": (items: itemType) => {
@@ -55,6 +46,20 @@ export default function ListComponent({ request }: Props) {
     }
   }
 
+  const handleStructureChanges = (value: structureType)=>{
+    if(ArrayList === undefined) return
+    let newItemList = [...ArrayList]
+    let filteredKeys: string[] = Object.keys(value).filter(key=>{
+      if(!structure.hasOwnProperty(key)) return key
+    })
+    for(let i=0; i < newItemList.length; i++) {
+      let newData = filteredKeys.reduce((obj, key) => ({ ...obj, [key]: "" }), {})
+      newItemList[i] = {...newItemList[i], ...newData}
+    }
+    setList(newItemList)
+    setStructure(value)
+  }
+
   // let ListFilled = ArrayList !== undefined
 
   // if (!ListFilled) { requestCounter++; if (requestCounter < 2) getList() }
@@ -64,6 +69,12 @@ export default function ListComponent({ request }: Props) {
     getList()
   }, [])
 
-  return ArrayList !== undefined ? <ItemList array={ArrayList} changeArray={changeArray} editable structure={structure} setStructure={setStructure}/>
+  return ArrayList !== undefined ? <ItemList 
+      array={ArrayList} 
+      changeArray={changeArray} 
+      editable 
+      structure={structure} 
+      setStructure={handleStructureChanges}
+    />
     : <div className='loading-icon margin-0-auto'></div>
 }

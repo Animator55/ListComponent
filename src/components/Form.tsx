@@ -1,16 +1,16 @@
 import React from 'react'
-import { itemType } from '../vite-env'
+import { itemType, structureType } from '../vite-env'
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 type Props = {
-    structure: string[]
+    structure: structureType
     initialData: Array<itemType | number> | undefined
     confirm: Function
 }
 
 export default function Form({structure, initialData, confirm}: Props) {
-    let data = initialData !== undefined ? initialData[0] as itemType : structure.reduce((obj, key) => ({ ...obj, [key]: "" }), {}) as itemType
+    let data = initialData !== undefined ? initialData[0] as itemType : Object.keys(structure).reduce((obj, key) => ({ ...obj, [key]: "" }), {}) as itemType
 
     const [LocalData, setLocalData] = React.useState<itemType>(data)
     const [displayed, setDisplayed] = React.useState(initialData !== undefined)
@@ -31,9 +31,9 @@ export default function Form({structure, initialData, confirm}: Props) {
                 </button>
             </nav>
             <form onSubmit={submit}>
-                {structure && structure.map((key:string)=>{
+                {structure && Object.keys(structure).map((key:string)=>{
                     return <div className='custom-input' key={Math.random()}>
-                        <label>{key}</label>
+                        <label>{structure[key].name}</label>
                         <input
                             defaultValue={LocalData[key]}
                             onBlur={(e)=>{setLocalData({...LocalData, [key]: e.currentTarget.value})}}

@@ -5,7 +5,7 @@ import { faLock } from "@fortawesome/free-solid-svg-icons/faLock"
 import { faSquare } from "@fortawesome/free-solid-svg-icons/faSquare"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
-import { itemType } from "../vite-env"
+import { itemType, structureType } from "../vite-env"
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons/faCaretDown"
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark"
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons/faEllipsis"
@@ -22,7 +22,7 @@ type Props = {
         edit: Function
     }
     editable: boolean
-    structure: string[]
+    structure: structureType
     setStructure: Function
 }
 
@@ -44,21 +44,6 @@ const sortArray = (sort:string, array: itemType[]) => {
     
 }
 
-// check if value has to be showed like a chip
-const checkChips = (val: string[] | string, canDelete: boolean, deleteFunction?: Function) =>{
-    if(!Array.isArray(val) || val.length === 0) return val
-    let ChipList = []
-    for(let i=0; i<3; i++){
-        if(i === val.length) break
-        ChipList.push(<div className="tags" key={Math.random()} onClick={()=>{if(canDelete && deleteFunction !== undefined) deleteFunction(i)}}>
-            {canDelete && <FontAwesomeIcon icon={faXmark}/>}
-            <p>{val[i]}</p>
-        </div>)
-    }
-
-    return <>{ChipList}{val.length > 3 && <FontAwesomeIcon icon={faEllipsis} size="xl"/>}</>
-}
-
 const generateColumns = (columns:number):string=>{
     let columnWidth = (100-(columns-1)*0.2)/columns
     let result = "repeat("+columns+", "+columnWidth+"%)"
@@ -66,8 +51,7 @@ const generateColumns = (columns:number):string=>{
     return result
 }
 
-let blockedColumns: string[] = ["Nombre", "Estado"]
-let notEditableColumns: string[] = ["_id", "Componentes", "Tags", "Image"]
+let blockedColumns: string[] = []
 
 export default function ItemList ({array, changeArray, editable, structure, setStructure}:Props){
     const [hiddenColumns, setHiddenColumns] = React.useState<string[]>(["_id"])
@@ -135,13 +119,12 @@ export default function ItemList ({array, changeArray, editable, structure, setS
                 <div className="col-visible-span">
                     <button onClick={()=>{setStructurePop(true)}}><FontAwesomeIcon icon={faGear}/>Configurate Columns</button>
                     <hr/>
-                    <button onClick={()=>{handlerHiddenCol("#")}}><FontAwesomeIcon icon={!hiddenColumns.includes("#") ? faCheckSquare : faSquare}/>Index</button>
                     {array.length !== 0 && Object.keys(array[0]).map(key=>{
                         return <button 
                             key={Math.random()} 
                             onClick={()=>{handlerHiddenCol(key)}}>
                                 <FontAwesomeIcon icon={!blockedColumns.includes(key) ? !hiddenColumns.includes(key) ? faCheckSquare : faSquare: faLock}/>
-                                {key}
+                                {structure[key].name}
                         </button>
                     })}
                 </div>
@@ -155,9 +138,8 @@ export default function ItemList ({array, changeArray, editable, structure, setS
                 icon={selectedItems.length === array.length ? faCheckSquare : faSquare} 
                 size="xl"
             />
-            <section style={{gridTemplateColumns: generateColumns((Object.keys(array[0]).length+1) - hiddenColumns.length)}}>
-                {!hiddenColumns.includes("#") && <button className={sortValSplited === "#" ? "btn-active" : ""} onClick={()=>{setSortValue(undefined)}}>{"#"}</button>}
-                {Object.keys(array[0]).map(key=>{
+            <section style={{gridTemplateColumns: generateColumns((Object.keys(array[0]).length) - hiddenColumns.length)}}>
+                {Object.keys(structure).map((key: string)=>{
                     if(!hiddenColumns.includes(key)){
                         return (
                             <button 
@@ -172,12 +154,12 @@ export default function ItemList ({array, changeArray, editable, structure, setS
                                     }
                                 }}
                             >
-                                {sortValSplited === key ? <FontAwesomeIcon 
+                                {sortValSplited === key && <FontAwesomeIcon 
                                     icon={faCaretDown} 
                                     style={direction ? {} : {rotate: "180deg"}} 
                                     size="xl" 
-                                /> : null}
-                                {key}
+                                />}
+                                {structure[key].name}
                             </button>
                         )
                     }
@@ -198,16 +180,10 @@ export default function ItemList ({array, changeArray, editable, structure, setS
                         <div 
                             className="item-content"
                             onClick={()=>{if(editable) setEditItem([item, i])}} 
-                            style={{gridTemplateColumns: generateColumns((Object.keys(array[0]).length+1) - hiddenColumns.length)}}
+                            style={{gridTemplateColumns: generateColumns((Object.keys(array[0]).length) - hiddenColumns.length)}}
                         >
-                            {!hiddenColumns.includes("#") && <div>{"#"+i}</div>}
                             {Object.keys(item).map(key=>{
-                                return !hiddenColumns.includes(key) && <React.Fragment key={Math.random()} >
-                                    {selectedItems.includes(item._id) && editable && !notEditableColumns.includes(key) ?     
-                                        <div>{item[key]}</div> 
-                                        :
-                                        <div>{checkChips(item[key],selectedItems.includes(item._id) && editable)}</div>}
-                                </React.Fragment>
+                                return !hiddenColumns.includes(key) && <div key={Math.random()}>{item[key]}</div> 
                             })}
                         </div>
                     </div>

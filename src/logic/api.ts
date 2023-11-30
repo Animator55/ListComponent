@@ -1,11 +1,11 @@
 import { itemType } from "../vite-env"
 
 let productsArray: itemType[] = [
-    {"_id": "5356", "Nombre": "SaleExample", "Tipo": "Idonknow30", "Descripción": "", "Tags": [], "Estado": "Inactivo"},
-    {"_id": "0000", "Nombre": "a", "Tipo": "Idonknow", "Descripción": "", "Tags": [], "Estado": "Activo"},
-    {"_id": "0031", "Nombre": "SaleExample2", "Tipo": "Idonknow", "Descripción": "", "Tags": [], "Estado": "Activo"},
-    {"_id": "0200", "Nombre": "SaleExample23", "Tipo": "Idonknow30d", "Descripción": "", "Tags": [], "Estado": "Activo"},
-    {"_id": "2454", "Nombre": "SaleExsfafas", "Tipo": "Idonknow30", "Descripción": "", "Tags": [], "Estado": "Inactivo"},
+    {"_id": "5356", "1001": "SaleExample", "1002": "Idonknow30", "1003": "", "1004": [], "1005": "Inactivo"},
+    {"_id": "1000", "1001": "a", "1002": "Idonknow", "1003": "", "1004": [], "1005": "Activo"},
+    {"_id": "0031", "1001": "SaleExample2", "1002": "Idonknow", "1003": "", "1004": [], "1005": "Activo"},
+    {"_id": "0200", "1001": "SaleExample23", "1002": "Idonknow30d", "1003": "", "1004": [], "1005": "Activo"},
+    {"_id": "2454", "1001": "SaleExsfafas", "1002": "Idonknow30", "1003": "", "1004": [], "1005": "Inactivo"},
 ]
 
 export const listsAPI = {
