@@ -85,9 +85,10 @@ button * {
 }
 .list-head > section {
     display: grid;
+    display: flex; /**/
     background-color: transparent;
-    gap: 0.2%;
     border: 1px solid var(--cgray);
+    gap: 0.2%;
     width: 100%;
 }
 .list-head > section > button {
@@ -96,7 +97,17 @@ button * {
     justify-content: end;
     overflow: hidden;
     text-overflow: ellipsis;
+    position: relative;
     background-color: var(--clightgray);
+}
+.list-head .drag {
+    position: absolute;
+    background-color: red;
+    cursor: e-resize;
+    width: 2%;
+    height: 100%;
+    right: 0;
+    pointer-events: all;
 }
 .list-head > section > button:hover {
     background-color: var(--cscnd);
@@ -126,6 +137,7 @@ button * {
     background-color: var(--cgray);
     border-radius: 3px;
     display: grid;
+    display: flex; /**/
     border: 1px solid var(--cgray);
     gap: 0.2%;
     width: 100%;
