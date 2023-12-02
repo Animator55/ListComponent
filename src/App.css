@@ -7,6 +7,10 @@ body {
     --clightgray: #d8d8d8;
 }
 
+ul {
+    padding: 0;
+}
+
 .d-flex {
     display: flex;
 }
@@ -76,7 +80,54 @@ button * {
     width: 89%;
     margin: 0 auto;
 }
+/**/
 
+.main {
+    display: flex;
+}
+
+.select-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.column-wraper {
+    display: flex;
+    width: 100%;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.top-btn {
+    background-color: var(--cgray);
+    color: var(--cmain);
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-height: 1.9rem;
+    font-size: 0.9rem;
+    justify-content: end;
+}
+.top-btn > svg {
+    margin-left: auto;
+}
+.top-btn.active {
+    background-color: var(--cmain);
+    color: var(--cscnd);
+}
+
+.item {
+    padding: 0.2rem 0.05rem;
+    text-align: start;
+}
+
+/**/
+/*
 .list-head {
     display: flex;
     gap: 0.5rem;
@@ -85,7 +136,7 @@ button * {
 }
 .list-head > section {
     display: grid;
-    display: flex; /**/
+    display: flex;
     background-color: transparent;
     border: 1px solid var(--cgray);
     gap: 0.2%;
@@ -137,7 +188,6 @@ button * {
     background-color: var(--cgray);
     border-radius: 3px;
     display: grid;
-    display: flex; /**/
     border: 1px solid var(--cgray);
     gap: 0.2%;
     width: 100%;
@@ -149,7 +199,7 @@ button * {
     padding: 0.5rem 0.2rem;
     background-color: var(--clightgray);
 }
-
+*/
 /**/
 
 .blur-background {

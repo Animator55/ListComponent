@@ -213,7 +213,7 @@ export default function ItemList ({array, changeArray, editable, structure, setS
     // }
 
     function SelectColumn (){
-        return <ul>
+        return <ul className="select-column">
             <FontAwesomeIcon 
                 onClick={()=>{handlerSelectedItems("", true)}} 
                 icon={selectedItems.length === array.length ? faCheckSquare : faSquare} 
@@ -237,7 +237,7 @@ export default function ItemList ({array, changeArray, editable, structure, setS
             for(let i=0; i<array.length; i++){
                 list.push(<div 
                     onClick={()=>{if(editable) setEditItem([array[i], i])}} 
-                    // className={selectedItems.includes(item._id) ? "item selected" : "item"} 
+                    className={selectedItems.includes(array[i]._id) ? "item selected" : "item"} 
                     key={Math.random()}
                 >
                     {array[i][entry_id]}
@@ -245,7 +245,7 @@ export default function ItemList ({array, changeArray, editable, structure, setS
             }
 
             const TopButton = ()=>{
-                return <button className={sortValSplited === entry_id ? "btn-active" : ""} 
+                return <button className={sortValSplited === entry_id ? "top-btn active" : "top-btn"} 
                     key={Math.random()}
                     onClick={(e)=>{
                         if(e.currentTarget.className === "drag") return
@@ -276,7 +276,7 @@ export default function ItemList ({array, changeArray, editable, structure, setS
 
         const order = Object.keys(structure)
 
-        return <section>
+        return <section className="column-wraper">
             {order.map((entry_id: string)=>{
                 if(!hiddenColumns.includes(entry_id)) return ColumnComponent(entry_id)
             })}
@@ -292,7 +292,7 @@ export default function ItemList ({array, changeArray, editable, structure, setS
         <div>
             <TopBar/>
             {array.length !== 0 ? 
-                <div>
+                <div className="main">
                     {/* <ListTopBar/>
                     <ListComponent/> */}
                     <SelectColumn/>
