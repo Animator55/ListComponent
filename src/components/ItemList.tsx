@@ -46,7 +46,7 @@ const sortArray = (sort:string, array: itemType[]) => {
 
 const generateColumns = (columns:number):string=>{
     return ""
-    let columnWidth = (100-(columns-1)*0.2)/columns
+    let columnWidth = 100/columns
     let result = "repeat("+columns+", "+columnWidth+"%)"
     
     return result
@@ -99,24 +99,29 @@ export default function ItemList ({array, changeArray, editable, structure, setS
         setStructure(arr)
     }
 
-    // const dragTop = (e: React.MouseEvent)=>{
-    //     let drag = e.currentTarget
-    //     let button = drag.parentElement as HTMLButtonElement
+    const dragTop = (e: React.MouseEvent, entry_id: string)=>{
+        let drag = e.currentTarget
+        
+        const move = (e2: MouseEvent)=>{
+            let column = drag.parentElement!
+            let columnWrap = column.parentElement
+            if(column && columnWrap) {
+                let maxWidthPx = columnWrap.clientWidth
+                let result = (parseFloat(column.style.width) + (100/maxWidthPx)*e2.movementX)
+                if(result < 7 || result > 100) return
+                column.style.width = result + "%"
+            }
+        }
+        const drop = ()=>{
+            document.removeEventListener('mousemove', move)
+            document.removeEventListener('mouseup', drop)
+            let column = drag.parentElement!
+            setStructure({...structure, [entry_id]: {...structure[entry_id], size: column.style.width}})
+        }
 
-    //     const move = (e2: MouseEvent)=>{
-    //         if(button) {
-    //             console.log(parseInt(button.style.width) + e2.movementX + "px")
-    //             button.style.width = parseInt(button.style.width) + e2.movementX + "px"
-    //         }
-    //     }
-    //     const drop = ()=>{
-    //         document.removeEventListener('mousemove', move)
-    //         document.removeEventListener('mouseup', drop)
-    //     }
-
-    //     document.addEventListener('mousemove', move)
-    //     document.addEventListener('mouseup', drop, {once: true})
-    // }
+        document.addEventListener('mousemove', move)
+        document.addEventListener('mouseup', drop, {once: true})
+    }
     
     function TopBar () {
         return (<>
@@ -151,66 +156,6 @@ export default function ItemList ({array, changeArray, editable, structure, setS
             </nav>
         </>)
     }
-    // function ListTopBar () {
-    //     return (<header className="list-head">
-    //         <FontAwesomeIcon 
-    //             onClick={()=>{handlerSelectedItems("", true)}} 
-    //             icon={selectedItems.length === array.length ? faCheckSquare : faSquare} 
-    //             size="xl"
-    //         />
-    //         <section style={{gridTemplateColumns: generateColumns((Object.keys(array[0]).length) - hiddenColumns.length)}}>
-    //             {Object.keys(structure).map((key: string)=>{
-    //                 if(!hiddenColumns.includes(key)){
-    //                     return <button 
-    //                         className={sortValSplited === key ? "btn-active" : ""} 
-    //                         key={Math.random()}
-    //                         onClick={(e)=>{
-    //                             if(e.currentTarget.className === "drag") return
-    //                             if(sortValue !== key) {
-    //                                 sortArray(key, array); setSortValue(key);
-    //                             }
-    //                             else{
-    //                                 sortArray("-:"+key, array); setSortValue("-:"+key);
-    //                             }
-    //                         }}
-    //                     >
-    //                         {sortValSplited === key && <FontAwesomeIcon 
-    //                             icon={faCaretDown} 
-    //                             style={direction ? {} : {rotate: "180deg"}} 
-    //                             size="xl" 
-    //                         />}
-    //                         {structure[key].name}
-    //                         <div onMouseDown={dragTop} className="drag"></div>
-    //                     </button>
-    //                 }
-    //             })}
-    //         </section>
-    //     </header>)
-    // }
-    // function ListComponent (){
-    //     return (<ul className="list">
-    //         {array.map((item, i)=>{
-    //             return (
-    //                 <div className={selectedItems.includes(item._id) ? "item selected" : "item"} key={Math.random()}>
-    //                     <FontAwesomeIcon 
-    //                         onClick={()=>{handlerSelectedItems(item._id)}} 
-    //                         icon={selectedItems.includes(item._id) ? faCheckSquare : faSquare} 
-    //                         size="xl"
-    //                     />
-    //                     <div 
-    //                         className="item-content"
-    //                         onClick={()=>{if(editable) setEditItem([item, i])}} 
-    //                         style={{gridTemplateColumns: generateColumns((Object.keys(array[0]).length) - hiddenColumns.length)}}
-    //                     >
-    //                         {Object.keys(item).map(key=>{
-    //                             return !hiddenColumns.includes(key) && <div key={Math.random()}>{item[key]}</div> 
-    //                         })}
-    //                     </div>
-    //                 </div>
-    //             )
-    //         })}
-    //     </ul>)
-    // }
 
     function SelectColumn (){
         return <ul className="select-column">
@@ -230,18 +175,35 @@ export default function ItemList ({array, changeArray, editable, structure, setS
         </ul>
     }
 
+    const SelectAll = ()=>{
+        return <FontAwesomeIcon 
+            className="select-all"
+            onClick={()=>{handlerSelectedItems("", true)}} 
+            icon={selectedItems.length === array.length ? faCheckSquare : faSquare} 
+            size="xl"
+        />
+    }
+
     function Columns (){
         if(array.length === 0) return
-        const ColumnComponent = (entry_id: string)=>{
+        const ColumnComponent = (entry_id: string, first: boolean)=>{
             let list = []
             for(let i=0; i<array.length; i++){
-                list.push(<div 
-                    onClick={()=>{if(editable) setEditItem([array[i], i])}} 
+                list.push(<section 
                     className={selectedItems.includes(array[i]._id) ? "item selected" : "item"} 
                     key={Math.random()}
                 >
-                    {array[i][entry_id]}
-                </div>)
+                    <div onClick={()=>{if(editable) setEditItem([array[i], i])}}>
+                        {array[i][entry_id]}
+                    </div>
+                    {first && <FontAwesomeIcon
+                        className="select"
+                        key={Math.random()}
+                        onClick={()=>{handlerSelectedItems(array[i]._id)}} 
+                        icon={selectedItems.includes(array[i]._id) ? faCheckSquare : faSquare} 
+                        size="xl"
+                    />}
+                </section>)
             }
 
             const TopButton = ()=>{
@@ -262,23 +224,28 @@ export default function ItemList ({array, changeArray, editable, structure, setS
                         style={direction ? {} : {rotate: "180deg"}} 
                         size="xl" 
                     />}
-                    {structure[entry_id].name}
+                    <p>{structure[entry_id].name}</p>
                 </button>
             }
 
-            return <section className="column" key={Math.random()}>
+
+            let width = structure[entry_id].size !== "" ? structure[entry_id].size : 100/(array.length-hiddenColumns.length) + "%"
+
+            return <section className="column" style={{width: width}} key={Math.random()}>
                 <TopButton/>
+                {first && <SelectAll/>}
                 <ul>
                     {list}
                 </ul>
+                <div className="drag" onMouseDown={(e)=>{dragTop(e, entry_id)}}/>
             </section>
         }
 
         const order = Object.keys(structure)
 
         return <section className="column-wraper">
-            {order.map((entry_id: string)=>{
-                if(!hiddenColumns.includes(entry_id)) return ColumnComponent(entry_id)
+            {order.map((entry_id: string, index: number)=>{
+                if(!hiddenColumns.includes(entry_id)) return ColumnComponent(entry_id, index === 0)
             })}
         </section>
     }
@@ -289,17 +256,14 @@ export default function ItemList ({array, changeArray, editable, structure, setS
             <h2>Error</h2>
         </div> )
     : (
-        <div>
+        <section>
             <TopBar/>
             {array.length !== 0 ? 
-                <div className="main">
-                    {/* <ListTopBar/>
-                    <ListComponent/> */}
-                    <SelectColumn/>
+                <section className="main">
                     <Columns/>
-                </div> 
+                </section> 
             : 
             <div>There are no items to list.</div>}
-        </div>
+        </section>
     )
 }

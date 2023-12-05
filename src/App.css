@@ -6,9 +6,14 @@ body {
     --cgray2: #c9c9c9;
     --clightgray: #d8d8d8;
 }
+div, p, button {
+    text-overflow: ellipsis;
+    overflow: hidden;
+} 
 
 ul {
     padding: 0;
+    margin: 0;
 }
 
 .d-flex {
@@ -44,6 +49,7 @@ button * {
     justify-content: end;
     display: flex;
     position: relative;
+    z-index: 2;
 }
 .list-tool-bar > button {
     color:var(--cscnd);
@@ -84,11 +90,19 @@ button * {
 
 .main {
     display: flex;
+    padding: 0.2rem 0.5rem;
+    padding-left: 2.5rem;
 }
 
-.select-column {
-    display: flex;
-    flex-direction: column;
+.select-all {
+    position: absolute;
+    left: -2rem;
+    top: 0.15rem;
+}
+.select {
+    position: absolute;
+    left: -2rem;
+    top: 0.1rem;
 }
 
 .column-wraper {
@@ -99,7 +113,15 @@ button * {
 .column {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: inherit;
+    max-width: 100%;
+    position: relative;
+    user-select: none;
+    border-bottom: 1px solid var(--cmain);
+    border-right: 1px solid var(--cmain);
+}
+.column:first-of-type {
+    border-left: 1px solid var(--cmain);
 }
 
 .top-btn {
@@ -122,85 +144,27 @@ button * {
 }
 
 .item {
-    padding: 0.2rem 0.05rem;
+    padding: 0.2rem 0.5rem;
     text-align: start;
-}
-
-/**/
-/*
-.list-head {
-    display: flex;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    background-color: var(--cgray);
-}
-.list-head > section {
-    display: grid;
-    display: flex;
-    background-color: transparent;
-    border: 1px solid var(--cgray);
-    gap: 0.2%;
-    width: 100%;
-}
-.list-head > section > button {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    overflow: hidden;
-    text-overflow: ellipsis;
     position: relative;
-    background-color: var(--clightgray);
+    border-bottom: 1px solid var(--cgray);
+    min-height: 1.2rem;
 }
-.list-head .drag {
-    position: absolute;
-    background-color: red;
-    cursor: e-resize;
-    width: 2%;
+.item:last-child {
+    border-bottom: 0;
+}
+
+.drag {
     height: 100%;
+    width: 2px;
+    position: absolute;
+    z-index: 1;
     right: 0;
-    pointer-events: all;
-}
-.list-head > section > button:hover {
-    background-color: var(--cscnd);
-}
-.list-head > section > button > svg {
-    margin-right: auto;
+    top: 0;
+    cursor: e-resize;
 }
 
-.list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-    padding: 0.5rem;
-}
-
-.item {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-}
-
-.item.selected > .item-content > div {
-    background-color: var(--cgray2);
-}
-
-.item-content {
-    background-color: var(--cgray);
-    border-radius: 3px;
-    display: grid;
-    border: 1px solid var(--cgray);
-    gap: 0.2%;
-    width: 100%;
-    overflow: hidden;
-}
-
-.item-content > div {
-    text-align: end;
-    padding: 0.5rem 0.2rem;
-    background-color: var(--clightgray);
-}
-*/
-/**/
+/***/
 
 .blur-background {
     position: fixed;
