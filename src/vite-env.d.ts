@@ -1,6 +1,6 @@
 export type itemType = {
     _id: string
-    [key:string] : string | string[]
+    [key:string] : string
 }  
 
 export type structureType = {

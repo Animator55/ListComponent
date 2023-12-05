@@ -157,22 +157,14 @@ export default function ItemList ({array, changeArray, editable, structure, setS
         </>)
     }
 
-    function SelectColumn (){
-        return <ul className="select-column">
-            <FontAwesomeIcon 
-                onClick={()=>{handlerSelectedItems("", true)}} 
-                icon={selectedItems.length === array.length ? faCheckSquare : faSquare} 
-                size="xl"
-            />
-            {array.length !== 0 && array.map(item=>{
-                return <FontAwesomeIcon
-                    key={Math.random()}
-                    onClick={()=>{handlerSelectedItems(item._id)}} 
-                    icon={selectedItems.includes(item._id) ? faCheckSquare : faSquare} 
-                    size="xl"
-                />
-            })}
-        </ul>
+    const SelectItem = (item: itemType)=>{
+        return <FontAwesomeIcon
+            className="select"
+            key={Math.random()}
+            onClick={()=>{handlerSelectedItems(item._id)}} 
+            icon={selectedItems.includes(item._id) ? faCheckSquare : faSquare} 
+            size="xl"
+        />
     }
 
     const SelectAll = ()=>{
@@ -196,13 +188,7 @@ export default function ItemList ({array, changeArray, editable, structure, setS
                     <div onClick={()=>{if(editable) setEditItem([array[i], i])}}>
                         {array[i][entry_id]}
                     </div>
-                    {first && <FontAwesomeIcon
-                        className="select"
-                        key={Math.random()}
-                        onClick={()=>{handlerSelectedItems(array[i]._id)}} 
-                        icon={selectedItems.includes(array[i]._id) ? faCheckSquare : faSquare} 
-                        size="xl"
-                    />}
+                    {first && SelectItem(array[i])}
                 </section>)
             }
 

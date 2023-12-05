@@ -134,6 +134,7 @@ button * {
     max-height: 1.9rem;
     font-size: 0.9rem;
     justify-content: end;
+    font-weight: 600;
 }
 .top-btn > svg {
     margin-left: auto;
@@ -144,11 +145,18 @@ button * {
 }
 
 .item {
-    padding: 0.2rem 0.5rem;
     text-align: start;
     position: relative;
     border-bottom: 1px solid var(--cgray);
+}
+.item > div:first-child {
     min-height: 1.2rem;
+    max-height: 1.2rem;
+    padding: 0.2rem 0.5rem;
+    overflow-y: auto;
+}
+.item.selected > div {
+    background-color: var(--cgray2);
 }
 .item:last-child {
     border-bottom: 0;
