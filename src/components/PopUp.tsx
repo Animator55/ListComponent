@@ -8,7 +8,10 @@ type Props = {
 }
 
 export default function PopUp ({ visibility, setPopUp, confirm}: Props) {
-    return visibility && <div className="blur-background">
+    return visibility && <div className="blur-background" onClick={(e)=>{
+        let target = e.target as HTMLDivElement
+        if(target.className === "blur-background") setPopUp(false)
+    }}>
         <section className='pop-up'>
             <nav>
                 <h3>Confirm action</h3>

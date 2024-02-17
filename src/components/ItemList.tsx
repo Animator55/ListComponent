@@ -7,11 +7,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 import { itemType, structureType } from "../vite-env"
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons/faCaretDown"
-import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark"
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons/faEllipsis"
 import Form from "./Form"
 import PopUp from "./PopUp"
 import StructureForm from "./StructureForm"
+import { sortArray } from "../logic/sortArray"
 
 type Props = {
     array: itemType[],
@@ -24,32 +23,6 @@ type Props = {
     editable: boolean
     structure: structureType
     setStructure: Function
-}
-
-const sortArray = (sort:string, array: itemType[]) => {
-    if(sort === undefined) return
-    let sortVal = sort.split(":")
-    let sortValIndex = sortVal[0] === "-" ? 1 : 0
-    let isArray = Array.isArray(array[0][sortVal[sortValIndex]])
-    array.sort((a, b) => {
-        const [nameA, nameB] = !isArray ? 
-            [a[sortVal[sortValIndex]].toUpperCase(), b[sortVal[sortValIndex]].toUpperCase()]
-        : 
-            [a[sortVal[sortValIndex]].length, b[sortVal[sortValIndex]].length] 
-        if (nameA < nameB) return -1
-        if (nameA > nameB) return 1
-        return 0;
-    });
-    if(sortValIndex) array.reverse()
-    
-}
-
-const generateColumns = (columns:number):string=>{
-    return ""
-    let columnWidth = 100/columns
-    let result = "repeat("+columns+", "+columnWidth+"%)"
-    
-    return result
 }
 
 let blockedColumns: string[] = []
@@ -65,12 +38,14 @@ export default function ItemList ({array, changeArray, editable, structure, setS
     let sortValSplited = sortValue !== undefined ? sortValue[0] === "-" ? sortValue.split(":")[1] : sortValue : undefined
     let direction = sortValue !== undefined ? sortValue[0] === "-" ? 0 : 1 : undefined 
 
+    //manage columns visibility
     const handlerHiddenCol = (key: string) => {
         if(blockedColumns.includes(key)) return
         if(!hiddenColumns.includes(key)) setHiddenColumns([...hiddenColumns, key])
         else setHiddenColumns([...hiddenColumns.filter((el)=>{return el !== key})])
     }
 
+    //manage Selected items
     const handlerSelectedItems = (item:string, allItems?:boolean) =>{
         if(allItems){setSelectedItems(selectedItems.length !== array.length ? [...array.map(el=>{return el._id})] : []); return }
         if(!selectedItems.includes(item)){
@@ -81,6 +56,7 @@ export default function ItemList ({array, changeArray, editable, structure, setS
         }
     }
 
+    //form handlers
     const handlerEditItems = (action: string, index?: number, value?: itemType) =>{
         changeArray[action](selectedItems, index, value)
         setSelectedItems([])
@@ -99,6 +75,7 @@ export default function ItemList ({array, changeArray, editable, structure, setS
         setStructure(arr)
     }
 
+    /// modify Column Width
     const dragTop = (e: React.MouseEvent, entry_id: string)=>{
         let drag = e.currentTarget
         
@@ -123,6 +100,10 @@ export default function ItemList ({array, changeArray, editable, structure, setS
         document.addEventListener('mouseup', drop, {once: true})
     }
     
+
+
+    //COMPONENTS
+
     function TopBar () {
         return (<>
             {close && <PopUp visibility={close} setPopUp={setPopUp} confirm={()=>{handlerEditItems("delete")}}/>}
@@ -157,7 +138,7 @@ export default function ItemList ({array, changeArray, editable, structure, setS
         </>)
     }
 
-    const SelectItem = (item: itemType)=>{
+    function SelectItem (item: itemType){
         return <FontAwesomeIcon
             className="select"
             key={Math.random()}
@@ -167,7 +148,7 @@ export default function ItemList ({array, changeArray, editable, structure, setS
         />
     }
 
-    const SelectAll = ()=>{
+    function SelectAll (){
         return <FontAwesomeIcon 
             className="select-all"
             onClick={()=>{handlerSelectedItems("", true)}} 
@@ -178,6 +159,7 @@ export default function ItemList ({array, changeArray, editable, structure, setS
 
     function Columns (){
         if(array.length === 0) return
+
         const ColumnComponent = (entry_id: string, first: boolean)=>{
             let list = []
             for(let i=0; i<array.length; i++){
@@ -229,9 +211,12 @@ export default function ItemList ({array, changeArray, editable, structure, setS
 
         const order = Object.keys(structure)
 
+        let firstIndex = 0 //check first column
+
         return <section className="column-wraper">
             {order.map((entry_id: string, index: number)=>{
-                if(!hiddenColumns.includes(entry_id)) return ColumnComponent(entry_id, index === 0)
+                if(hiddenColumns.includes(entry_id)) firstIndex++
+                else return ColumnComponent(entry_id, firstIndex === index)
             })}
         </section>
     }

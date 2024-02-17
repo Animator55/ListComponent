@@ -27,10 +27,11 @@ export default function StructureForm({structure, confirm}: Props) {
                             onBlur={(e)=>{
                                 let name = e.currentTarget.value
                                 let newArray = {}
-                                if(name === "") for(const key2 in LocalData) {
+                                let isId = LocalData[key]._id === "_id"
+                                if(name === "" && !isId) for(const key2 in LocalData) {
                                     if(key2 !== key) newArray = {...newArray, [key2] : LocalData[key2]}
                                 }
-                                else newArray = {...LocalData, [key] : {...LocalData[key], name: name}}
+                                else newArray = {...LocalData, [key] : {...LocalData[key], name: isId && name === "" ? LocalData[key].name : name}}
 
                                 setLocalData(newArray)
                             }}

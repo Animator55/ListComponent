@@ -41,7 +41,7 @@ export default function ListComponent({ request }: Props) {
     },
     "edit": (index:number, value: itemType) => {
       if(ArrayList === undefined)return
-      setList(Object.values({...ArrayList, [index]: value}))
+      setList(Object.values({...ArrayList, [index]: value}) as itemType[])
       // activateToast([true, {title: "Success!", text: `Edit was done succesfully.`, result: "success"}])
     }
   }
@@ -52,18 +52,23 @@ export default function ListComponent({ request }: Props) {
     let filteredKeys: string[] = Object.keys(value).filter(key=>{
       if(!structure.hasOwnProperty(key)) return key
     })
-    for(let i=0; i < newItemList.length; i++) {
+
+    itemloop: for(let i=0; i < newItemList.length; i++) {
+      let item = newItemList[i]
+
+      let result = {_id: item._id}
+
+      keyloop: for(const key in item){
+        if(!Object.keys(value).includes(key) || key === "_id") continue keyloop
+        result = {...result, [key]: item[key]}
+      }
+
       let newData = filteredKeys.reduce((obj, key) => ({ ...obj, [key]: "" }), {})
-      newItemList[i] = {...newItemList[i], ...newData}
+      newItemList[i] = {...result, ...newData}
     }
     setList(newItemList)
     setStructure(value)
   }
-
-  // let ListFilled = ArrayList !== undefined
-
-  // if (!ListFilled) { requestCounter++; if (requestCounter < 2) getList() }
-  // else requestCounter = 0
 
   React.useEffect(()=>{
     getList()

@@ -10,6 +10,7 @@ let productsArray: itemType[] = [
 
 export const listsAPI = {
     getLists: (request: string): itemType[] => {
+      console.log(request)
       return productsArray
     }
   }

@@ -22,7 +22,10 @@ export default function Form({structure, initialData, confirm}: Props) {
         confirm(LocalData, create, index)
     }
 
-    return displayed ? <section className='blur-background'>
+    return displayed ? <section className='blur-background' onClick={(e)=>{
+        let target = e.target as HTMLDivElement
+        if(target.className === "blur-background") {setDisplayed(false); setLocalData(data); confirm()}
+    }}>
         <section>
             <nav>
                 <h4>{LocalData?._id}</h4>
@@ -36,7 +39,7 @@ export default function Form({structure, initialData, confirm}: Props) {
                         <label>{structure[key].name}</label>
                         <input
                             defaultValue={LocalData[key]}
-                            onBlur={(e)=>{setLocalData({...LocalData, [key]: e.currentTarget.value})}}
+                            onBlur={(e)=>{setLocalData({...LocalData, [key]:  e.currentTarget.value})}}
                         />
                     </div>
                 })}
